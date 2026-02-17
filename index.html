@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Barbershop · Teoría de los 3 cerebros</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+      background: #1a1a1a;
+      color: #e0e0e0;
+      padding: 25px 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h1 {
+      text-align: center;
+      font-weight: 400;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #d4af37;
+      border-bottom: 1px solid #3e2e1f;
+      padding-bottom: 12px;
+      margin-bottom: 20px;
+      width: 100%;
+      max-width: 1200px;
+    }
+    .subtitulo {
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto 30px;
+      font-size: 1.1rem;
+      color: #b0a090;
+      font-style: italic;
+    }
+    .contenedor-principal {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 25px;
+      justify-content: center;
+      align-items: stretch;
+      max-width: 1300px;
+      width: 100%;
+    }
+
+    /* Tarjeta del flyer */
+    .cerebro-card {
+      flex: 1 1 480px;
+      background: #2d241c;
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: 0 20px 30px -10px rgba(0,0,0,0.8), inset 0 0 0 1px #6b4f3a;
+      backdrop-filter: blur(2px);
+    }
+    .botones-capas {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .boton-capa {
+      flex: 1;
+      padding: 12px 5px;
+      border: none;
+      border-radius: 50px;
+      font-weight: bold;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 0 rgba(0,0,0,0.3);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .boton-capa.activo {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 0 rgba(0,0,0,0.4), 0 0 15px currentColor;
+    }
+    .boton-capa.inactivo {
+      opacity: 0.7;
+      filter: grayscale(0.4);
+    }
+    #btnReptiliano { background: #b34b3f; }
+    #btnLimbico    { background: #c49a2b; color: #1a1a1a; }
+    #btnNeocortex  { background: #3c6b7c; }
+
+    /* Botón de vista completa */
+    .vista-completa-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 15px;
+    }
+    #btnVistaCompleta {
+      background: #4f3e2e;
+      color: #e0d3c0;
+      border: 2px solid #d4af37;
+      border-radius: 40px;
+      padding: 8px 25px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 4px 0 #2b1f15;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    #btnVistaCompleta.activo {
+      background: #d4af37;
+      color: #1a1a1a;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 #7a5e44;
+    }
+
+    .flyer-wrapper {
+      background: #1e1611;
+      border-radius: 16px;
+      padding: 15px;
+      border: 2px solid #7a5e44;
+      box-shadow: inset 0 0 20px #0a0a0a;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .flyer-capas {
+      position: relative;
+      width: 750px;
+      height: 750px;
+      max-width: 100%;
+      border-radius: 8px;
+      overflow: hidden;
+      background-color: #2b1f15; /* color de respaldo */
+      background-image: repeating-linear-gradient(45deg, #3e2e1f 0px, #3e2e1f 10px, #4f3e2e 10px, #4f3e2e 20px);
+    }
+
+    /* Todas las imágenes se posicionan absolutas */
+    .flyer-capas img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: opacity 0.3s ease, filter 0.3s ease;
+      pointer-events: none;
+    }
+
+    /* Clases de control de capas (modo interactivo) */
+    .capa-activa {
+      opacity: 1 !important;
+      filter: blur(0) !important;
+      pointer-events: auto !important;
+      z-index: 4;
+    }
+    .capa-desenfocada {
+      opacity: 0.4 !important;
+      filter: blur(3px) !important;
+      pointer-events: auto !important;
+      z-index: 3;
+    }
+    .capa-oculta {
+      opacity: 0 !important;
+      pointer-events: none !important;
+      z-index: 2;
+    }
+    /* Fondo base */
+    #imgFondo {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: filter 0.3s ease, opacity 0.3s ease;
+      z-index: 1;
+      pointer-events: none;
+    }
+    .fondo-nitido { filter: blur(0); opacity: 1; }
+    .fondo-desenfocado { filter: blur(3px); opacity: 0.8; }
+
+    /* Clases para modo vista completa (todo nítido y visible) */
+    .modo-completo #imgFondo {
+      filter: blur(0) !important;
+      opacity: 1 !important;
+    }
+    .modo-completo .capa-imagen {
+      opacity: 1 !important;
+      filter: blur(0) !important;
+      pointer-events: none !important; /* no queremos clics accidentales en modo completo */
+      z-index: 2 !important;
+    }
+
+    .leyenda-capas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+      justify-content: center;
+    }
+    .tag {
+      padding: 6px 14px;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: #2f2a24;
+      border-left: 4px solid;
+      color: #ddd;
+    }
+    .tag-rept { border-color: #b34b3f; }
+    .tag-limb { border-color: #c49a2b; }
+    .tag-neo  { border-color: #3c6b7c; }
+
+    /* Panel de información */
+    .info-card {
+      flex: 1 1 400px;
+      background: #2d241c;
+      border-radius: 24px;
+      padding: 25px;
+      box-shadow: 0 20px 30px -10px black, inset 0 0 0 1px #6b4f3a;
+      display: flex;
+      flex-direction: column;
+    }
+    .titulo-cerebro {
+      font-size: 2rem;
+      font-weight: 300;
+      margin-bottom: 10px;
+      color: #d4af37;
+      border-bottom: 1px dashed #7a5e44;
+      padding-bottom: 10px;
+    }
+    .bloque-info {
+      margin: 12px 0;
+      background: #1f1a15;
+      padding: 14px 18px;
+      border-radius: 16px;
+      border-left: 6px solid;
+    }
+    .bloque-info p { margin: 6px 0; line-height: 1.5; }
+    .bloque-rept { border-color: #b34b3f; }
+    .bloque-limb { border-color: #c49a2b; }
+    .bloque-neo  { border-color: #3c6b7c; }
+    .etiqueta {
+      font-weight: 600;
+      color: #d4af37;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+    }
+    hr { border: none; height: 1px; background: #3e2e1f; margin: 15px 0; }
+
+    /* Cuestionario */
+    .quiz-section {
+      max-width: 900px;
+      width: 100%;
+      margin-top: 40px;
+      background: #2d241c;
+      border-radius: 30px;
+      padding: 30px;
+      box-shadow: 0 20px 30px -10px black, inset 0 0 0 1px #6b4f3a;
+    }
+    .quiz-section h2 {
+      color: #d4af37;
+      font-weight: 300;
+      margin-bottom: 20px;
+      text-align: center;
+      font-size: 2rem;
+    }
+    .pregunta {
+      background: #1f1a15;
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-left: 8px solid;
+    }
+    .pregunta h3 {
+      margin-bottom: 15px;
+      color: #e0d3c0;
+      font-size: 1.3rem;
+    }
+    .opciones { display: flex; flex-direction: column; gap: 12px; }
+    .opcion {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #2b231d;
+      padding: 10px 18px;
+      border-radius: 50px;
+      border: 1px solid #4f3e2e;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .opcion:hover { background: #3f3228; border-color: #d4af37; }
+    .opcion input[type="radio"] {
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #7a5e44;
+      border-radius: 50%;
+      background: #1a1a1a;
+      transition: 0.1s;
+      cursor: pointer;
+    }
+    .opcion input[type="radio"]:checked {
+      background: #d4af37;
+      border-color: #d4af37;
+      box-shadow: 0 0 8px gold;
+    }
+    .opcion label { flex: 1; font-size: 1rem; color: #ddd; cursor: pointer; }
+    .btn-comprobar {
+      background: #c49a2b;
+      border: none;
+      color: #1a1a1a;
+      font-weight: bold;
+      font-size: 1.2rem;
+      padding: 15px 30px;
+      border-radius: 60px;
+      cursor: pointer;
+      transition: 0.2s;
+      margin-top: 15px;
+      width: 100%;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      box-shadow: 0 6px 0 #7a5e44;
+    }
+    .btn-comprobar:hover {
+      background: #dbb14b;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 0 #7a5e44;
+    }
+    .resultado-quiz {
+      margin-top: 20px;
+      font-size: 1.3rem;
+      text-align: center;
+      background: #1f1a15;
+      padding: 15px;
+      border-radius: 60px;
+      color: #d4af37;
+      font-weight: bold;
+    }
+
+    /* Botón de email al docente */
+    .btn-email {
+      display: inline-block;
+      background: #b34b3f;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.1rem;
+      padding: 12px 30px;
+      border-radius: 50px;
+      margin: 20px auto 10px;
+      border: 1px solid #d4af37;
+      box-shadow: 0 4px 0 #6d2e26;
+      transition: all 0.2s ease;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .btn-email:hover {
+      background: #c45f52;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 #6d2e26;
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 30px;
+      color: #b0a090;
+      font-size: 0.9rem;
+      text-align: center;
+      border-top: 1px solid #3e2e1f;
+      padding-top: 20px;
+      width: 100%;
+      max-width: 1200px;
+    }
+    footer p {
+      margin: 5px 0;
+    }
+    .footer-docente {
+      color: #d4af37;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+
+<h1>✂️ Semana 7 · ANUNCIO BARBERSHOP · TRES CEREBROS ✂️</h1>
+<div class="subtitulo">
+  🧠 Diagrama visual del cerebro con las tres capas diferenciadas por color: rojo=reptiliano, amarillo=límbico, azul=neocórtex.
+</div>
+
+<div class="contenedor-principal">
+  <!-- PANEL IZQUIERDO: FLYER INTERACTIVO -->
+  <div class="cerebro-card">
+    <div class="botones-capas">
+      <button id="btnReptiliano" class="boton-capa activo">🐊 REPTILIANO</button>
+      <button id="btnLimbico" class="boton-capa inactivo">🐴 LÍMBICO</button>
+      <button id="btnNeocortex" class="boton-capa inactivo">🧠 NEOCÓRTEX</button>
+    </div>
+
+    <!-- Botón de vista completa (nítido) -->
+    <div class="vista-completa-container">
+      <button id="btnVistaCompleta">🔆 VISTA COMPLETA NÍTIDA</button>
+    </div>
+
+    <div class="flyer-wrapper">
+      <div class="flyer-capas" id="contenedorCapas">
+        <!-- FONDO BASE: Limbico_2 -->
+        <img id="imgFondo"
+             class="fondo-base fondo-desenfocado"
+             src="Limbico_2.png"
+             alt="Ambiente de barbería con luz cálida"
+             title="Fondo: ambiente cálido (siempre presente)">
+
+        <!-- NEOCÓRTEX (datos racionales) -->
+        <img id="imgNeocortex"
+             class="capa-imagen capa-oculta"
+             src="Neurocortex.png"
+             alt="Elementos neocórtex: dirección, URL, año 1968"
+             title="Neocórtex: información práctica"
+             data-capa="neocortex">
+
+        <!-- LÍMBICO 1 (silla de cuero) -->
+        <img id="imgLimbico1"
+             class="capa-imagen capa-oculta"
+             src="Limbico_1.png"
+             alt="Silla de cuero acolchada"
+             title="Límbico: confort y emoción"
+             data-capa="limbico">
+
+        <!-- REPTILIANO (logo barba/calaveras) -->
+        <img id="imgReptiliano"
+             class="capa-imagen capa-activa"
+             src="Reptiliano.png"
+             alt="Logo de barba y calaveras"
+             title="Reptiliano: territorio y dominancia"
+             data-capa="reptiliano">
+      </div>
+    </div>
+
+    <div class="leyenda-capas">
+      <span class="tag tag-rept">🐊 Reptiliano: logo / calaveras</span>
+      <span class="tag tag-limb">🐴 Límbico: silla + fondo cálido</span>
+      <span class="tag tag-neo">🧠 Neocórtex: datos racionales</span>
+    </div>
+  </div>
+
+  <!-- PANEL DERECHO: INFORMACIÓN SEGÚN CEREBRO ACTIVO -->
+  <div class="info-card">
+    <div class="titulo-cerebro" id="tituloCerebro">🐊 REPTILIANO · SUPERVIVENCIA & TERRITORIO</div>
+    <div class="bloque-info bloque-rept" id="elementoFlyer">
+      <span class="etiqueta">✧ ELEMENTO EN EL FLYER ✧</span>
+      <p id="elemTexto">Logo de barba / Calaveras</p>
+    </div>
+    <div class="bloque-info bloque-rept" id="mensajeSub">
+      <span class="etiqueta">🗣️ MENSAJE SUBCONSCIENTE</span>
+      <p id="mensajeTexto"><i>“Este es tu territorio, afirma tu presencia.”</i></p>
+    </div>
+    <hr>
+    <div class="bloque-info bloque-rept" id="descripcion">
+      <span class="etiqueta">🧠 PSICOLOGÍA</span>
+      <p>Activa el instinto de dominancia y pertenencia tribal. La barba como símbolo de virilidad, las calaveras marcan un espacio masculino.</p>
+    </div>
+    <div class="bloque-info bloque-rept" id="pregunta">
+      <span class="etiqueta">❓ PREGUNTA QUE RESPONDE</span>
+      <p>«¿Es seguro? ¿Este es mi territorio?»</p>
+    </div>
+    <div class="bloque-info bloque-rept" id="aplicacion">
+      <span class="etiqueta">💼 APLICACIÓN EN BARBERSHOP</span>
+      <p>Colores tierra, símbolos de fuerza, madera oscura.</p>
+    </div>
+  </div>
+</div>
+
+<!-- CUESTIONARIO -->
+<section class="quiz-section">
+  <h2>🔍 CUESTIONARIO 3 CEREBROS</h2>
+
+  <div class="pregunta" style="border-left-color:#b34b3f;">
+    <h3>1. ¿Qué cerebro responde “¿Es seguro? ¿Pertenezco aquí?” en este flyer?</h3>
+    <div class="opciones">
+      <div class="opcion"><input type="radio" name="q1" value="reptil" id="q1a"><label for="q1a">🐊 Reptiliano</label></div>
+      <div class="opcion"><input type="radio" name="q1" value="limbico" id="q1b"><label for="q1b">🐴 Límbico</label></div>
+      <div class="opcion"><input type="radio" name="q1" value="neo" id="q1c"><label for="q1c">🧠 Neocórtex</label></div>
+    </div>
+  </div>
+
+  <div class="pregunta" style="border-left-color:#c49a2b;">
+    <h3>2. La silla de cuero acolchada y la calidez del ambiente activan sobre todo al:</h3>
+    <div class="opciones">
+      <div class="opcion"><input type="radio" name="q2" value="reptil" id="q2a"><label for="q2a">🐊 Reptiliano</label></div>
+      <div class="opcion"><input type="radio" name="q2" value="limbico" id="q2b"><label for="q2b">🐴 Límbico</label></div>
+      <div class="opcion"><input type="radio" name="q2" value="neo" id="q2c"><label for="q2c">🧠 Neocórtex</label></div>
+    </div>
+  </div>
+
+  <div class="pregunta" style="border-left-color:#3c6b7c;">
+    <h3>3. ¿Qué elemento del flyer se dirige más al razonamiento lógico?</h3>
+    <div class="opciones">
+      <div class="opcion"><input type="radio" name="q3" value="reptil" id="q3a"><label for="q3a">Logo / calaveras</label></div>
+      <div class="opcion"><input type="radio" name="q3" value="limbico" id="q3b"><label for="q3b">Silla de cuero</label></div>
+      <div class="opcion"><input type="radio" name="q3" value="neo" id="q3c"><label for="q3c">Dirección, URL y año 1968</label></div>
+    </div>
+  </div>
+
+  <div class="pregunta" style="border-left-color:#b34b3f;">
+    <h3>4. El mensaje “Este es tu territorio, afirma tu presencia” apela directamente al:</h3>
+    <div class="opciones">
+      <div class="opcion"><input type="radio" name="q4" value="reptil" id="q4a"><label for="q4a">🐊 Reptiliano</label></div>
+      <div class="opcion"><input type="radio" name="q4" value="limbico" id="q4b"><label for="q4b">🐴 Límbico</label></div>
+      <div class="opcion"><input type="radio" name="q4" value="neo" id="q4c"><label for="q4c">🧠 Neocórtex</label></div>
+    </div>
+  </div>
+
+  <button class="btn-comprobar" id="comprobarQuiz">COMPROBAR RESPUESTAS</button>
+  <div class="resultado-quiz" id="resultadoQuiz">—</div>
+
+  <!-- Botón para enviar mensaje al docente -->
+  <div style="text-align: center; margin-top: 30px;">
+    <a href="mailto:c12139@utp.edu.pe?subject=Consulta%20sobre%20Semiótica%20de%20la%20Imagen" class="btn-email">✉️ Enviar mensaje al docente</a>
+  </div>
+</section>
+
+<!-- FOOTER ACTUALIZADO CON DOCENTE Y CURSO -->
+<footer>
+  <p class="footer-docente">Docente: Mg Mario Quiroz | Curso: Semiótica de la Imagen · 2026 · Semana 7</p>
+  <p>🧠 Barbershop · Basado en la teoría de los tres cerebros de Paul MacLean</p>
+</footer>
+
+<script>
+  (function() {
+    // Datos de cada cerebro (incluye mensajes subconscientes detallados)
+    const datosBarber = {
+      reptiliano: {
+        titulo: "🐊 REPTILIANO · SUPERVIVENCIA & TERRITORIO",
+        elemento: "Logo de barba / Calaveras",
+        mensaje: "“Este es tu territorio, afirma tu presencia.”",
+        psicologia: "Activa el instinto de dominancia y pertenencia tribal. La barba como símbolo de virilidad, las calaveras marcan un espacio masculino.",
+        pregunta: "«¿Es seguro? ¿Este es mi territorio?»",
+        aplicacion: "Colores tierra, símbolos de fuerza, madera oscura."
+      },
+      limbico: {
+        titulo: "🐴 LÍMBICO · EMOCIÓN & CONFORT",
+        elemento: "Silla de cuero sobre ambiente cálido",
+        mensaje: "“Aquí te sentirás cómodo y valorado.”",
+        psicologia: "La silla acolchada y la iluminación cálida evocan placer, relajación y estatus de 'caballero'. Asocia el servicio con un mimo personal.",
+        pregunta: "«¿Me gusta? ¿Me hace sentir bien?»",
+        aplicacion: "Iluminación cálida, texturas suaves, ambiente vintage que conecta con recuerdos positivos."
+      },
+      neocortex: {
+        titulo: "🧠 NEOCÓRTEX · LÓGICA & RAZÓN",
+        elemento: "Dirección / URL / Año 1968",
+        mensaje: "“Es un negocio real, establecido y fácil de encontrar.”",
+        psicologia: "Procesa datos objetivos: dirección, sitio web, antigüedad (1968). Da confianza racional y justifica la visita.",
+        pregunta: "«¿Cómo llego? ¿Tienen experiencia?»",
+        aplicacion: "Información clara (dirección, web), sellos de calidad, datos históricos que demuestran trayectoria."
+      }
+    };
+
+    // Elementos del DOM
+    const contenedorCapas = document.getElementById('contenedorCapas');
+    const imgFondo = document.getElementById('imgFondo');
+    const imgRept  = document.getElementById('imgReptiliano');
+    const imgLimb1 = document.getElementById('imgLimbico1');
+    const imgNeo   = document.getElementById('imgNeocortex');
+    const btnVistaCompleta = document.getElementById('btnVistaCompleta');
+
+    const btnR = document.getElementById('btnReptiliano');
+    const btnL = document.getElementById('btnLimbico');
+    const btnN = document.getElementById('btnNeocortex');
+
+    const tituloEl = document.getElementById('tituloCerebro');
+    const elemTexto = document.getElementById('elemTexto');
+    const mensajeTexto = document.getElementById('mensajeTexto');
+    const descripcionP = document.querySelector('#descripcion p');
+    const preguntaP = document.querySelector('#pregunta p');
+    const aplicacionP = document.querySelector('#aplicacion p');
+    const bloques = [
+      document.getElementById('elementoFlyer'),
+      document.getElementById('mensajeSub'),
+      document.getElementById('descripcion'),
+      document.getElementById('pregunta'),
+      document.getElementById('aplicacion')
+    ];
+
+    // Estado: modo interactivo (false) o vista completa nítida (true)
+    let modoCompleto = false;
+
+    // Función que aplica las clases de visualización según el cerebro activo (modo interactivo)
+    function actualizarCapasInteractivo(tipo) {
+      // Quitar clases específicas de todas las capas (excepto fondo)
+      [imgRept, imgLimb1, imgNeo].forEach(img => {
+        img.classList.remove('capa-activa', 'capa-desenfocada', 'capa-oculta');
+      });
+
+      // Aplicar según tipo
+      if (tipo === 'reptiliano') {
+        imgRept.classList.add('capa-activa');
+        imgLimb1.classList.add('capa-oculta');
+        imgNeo.classList.add('capa-oculta');
+        imgFondo.classList.remove('fondo-nitido');
+        imgFondo.classList.add('fondo-desenfocado');
+      } 
+      else if (tipo === 'limbico') {
+        imgLimb1.classList.add('capa-activa');
+        imgRept.classList.add('capa-desenfocada');
+        imgNeo.classList.add('capa-oculta');
+        imgFondo.classList.remove('fondo-desenfocado');
+        imgFondo.classList.add('fondo-nitido');
+      } 
+      else { // neocortex
+        imgNeo.classList.add('capa-activa');
+        imgRept.classList.add('capa-desenfocada');
+        imgLimb1.classList.add('capa-oculta');
+        imgFondo.classList.remove('fondo-nitido');
+        imgFondo.classList.add('fondo-desenfocado');
+      }
+    }
+
+    // Actualiza el panel de información y los estilos de botones/bloques
+    function activarCerebro(tipo) {
+      const d = datosBarber[tipo];
+
+      tituloEl.textContent = d.titulo;
+      elemTexto.textContent = d.elemento;
+      mensajeTexto.innerHTML = `<i>${d.mensaje}</i>`;
+      descripcionP.textContent = d.psicologia;
+      preguntaP.textContent = d.pregunta;
+      aplicacionP.textContent = d.aplicacion;
+
+      // Cambiar color de los bloques laterales
+      bloques.forEach(b => {
+        b.classList.remove('bloque-rept', 'bloque-limb', 'bloque-neo');
+        if (tipo === 'reptiliano') b.classList.add('bloque-rept');
+        if (tipo === 'limbico')    b.classList.add('bloque-limb');
+        if (tipo === 'neocortex')  b.classList.add('bloque-neo');
+      });
+
+      // Actualizar botones
+      [btnR, btnL, btnN].forEach(b => {
+        b.classList.remove('activo');
+        b.classList.add('inactivo');
+      });
+      if (tipo === 'reptiliano') { btnR.classList.add('activo'); btnR.classList.remove('inactivo'); }
+      if (tipo === 'limbico')    { btnL.classList.add('activo'); btnL.classList.remove('inactivo'); }
+      if (tipo === 'neocortex')  { btnN.classList.add('activo'); btnN.classList.remove('inactivo'); }
+
+      // Si estamos en modo interactivo, actualizar capas; si estamos en modo completo, no cambiar la vista
+      if (!modoCompleto) {
+        actualizarCapasInteractivo(tipo);
+      }
+    }
+
+    // Cambiar entre modo interactivo y modo completo
+    function toggleVistaCompleta() {
+      modoCompleto = !modoCompleto;
+      if (modoCompleto) {
+        // Activar modo completo: todas las capas visibles y nítidas
+        contenedorCapas.classList.add('modo-completo');
+        btnVistaCompleta.classList.add('activo');
+        btnVistaCompleta.textContent = '🔆 MODO INTERACTIVO (DESENFOQUES)';
+        // Las capas ya son visibles por la clase .modo-completo, no necesitamos cambiar clases individuales
+      } else {
+        // Volver a modo interactivo: restaurar según cerebro activo actual
+        contenedorCapas.classList.remove('modo-completo');
+        btnVistaCompleta.classList.remove('activo');
+        btnVistaCompleta.textContent = '🔆 VISTA COMPLETA NÍTIDA';
+        // Restaurar la vista interactiva basada en el cerebro actual (el que esté activo en los botones)
+        let tipoActual = 'reptiliano';
+        if (btnL.classList.contains('activo')) tipoActual = 'limbico';
+        else if (btnN.classList.contains('activo')) tipoActual = 'neocortex';
+        actualizarCapasInteractivo(tipoActual);
+      }
+    }
+
+    // Eventos de botones de cerebro (solo afectan si no estamos en modo completo)
+    btnR.addEventListener('click', () => {
+      if (!modoCompleto) activarCerebro('reptiliano');
+      else {
+        // Si está en modo completo, cambiamos la info pero no la vista
+        activarCerebro('reptiliano');
+      }
+    });
+    btnL.addEventListener('click', () => {
+      if (!modoCompleto) activarCerebro('limbico');
+      else activarCerebro('limbico');
+    });
+    btnN.addEventListener('click', () => {
+      if (!modoCompleto) activarCerebro('neocortex');
+      else activarCerebro('neocortex');
+    });
+
+    // Eventos de clic en las imágenes (solo tienen efecto si NO estamos en modo completo)
+    [imgRept, imgLimb1, imgNeo].forEach(img => {
+      img.addEventListener('click', e => {
+        if (!modoCompleto) {
+          const capa = e.currentTarget.getAttribute('data-capa');
+          activarCerebro(capa);
+        }
+      });
+    });
+
+    // Evento del botón de vista completa
+    btnVistaCompleta.addEventListener('click', toggleVistaCompleta);
+
+    // Inicializar con reptiliano
+    activarCerebro('reptiliano');
+
+    // ---------- CUESTIONARIO ----------
+    const btnComprobar = document.getElementById('comprobarQuiz');
+    const resultadoDiv = document.getElementById('resultadoQuiz');
+    const preguntas = [
+      { name: 'q1', correcta: 'reptil' },
+      { name: 'q2', correcta: 'limbico' },
+      { name: 'q3', correcta: 'neo' },
+      { name: 'q4', correcta: 'reptil' }
+    ];
+
+    btnComprobar.addEventListener('click', () => {
+      let aciertos = 0;
+      preguntas.forEach(p => {
+        const radios = document.getElementsByName(p.name);
+        for (const r of radios) {
+          if (r.checked && r.value === p.correcta) {
+            aciertos++;
+            break;
+          }
+        }
+      });
+      let msg = `🎯 Aciertos: ${aciertos} de ${preguntas.length}`;
+      if (aciertos === preguntas.length) msg += ' · ¡Perfecto, maestro barbero!';
+      else if (aciertos >= 3) msg += ' · Muy bien, casi dominas los tres cerebros.';
+      else msg += ' · Vuelve a intentarlo, afila tu navaja mental.';
+      resultadoDiv.textContent = msg;
+    });
+  })();
+</script>
+
+<!-- Nota: Si las imágenes no existen, se verá un patrón de fondo de respaldo.
+     Se recomienda usar archivos PNG con transparencia para superponer correctamente. -->
+</body>
+</html>
