@@ -91,33 +91,6 @@
     #btnLimbico    { background: #c49a2b; color: #1a1a1a; }
     #btnNeocortex  { background: #3c6b7c; }
 
-    /* Botón de vista completa */
-    .vista-completa-container {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 15px;
-    }
-    #btnVistaCompleta {
-      background: #4f3e2e;
-      color: #e0d3c0;
-      border: 2px solid #d4af37;
-      border-radius: 40px;
-      padding: 8px 25px;
-      font-size: 1rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.2s;
-      box-shadow: 0 4px 0 #2b1f15;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-    #btnVistaCompleta.activo {
-      background: #d4af37;
-      color: #1a1a1a;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 0 #7a5e44;
-    }
-
     .flyer-wrapper {
       background: #1e1611;
       border-radius: 16px;
@@ -151,50 +124,44 @@
       pointer-events: none;
     }
 
-    /* Clases de control de capas (modo interactivo) */
+    /* Fondo base - siempre debajo */
+    #imgFondo {
+      z-index: 1;
+    }
+
+    /* REPTILIANO - nivel 2 */
+    #imgReptiliano {
+      z-index: 2;
+    }
+
+    /* LÍMBICO 1 - nivel 3 (por debajo de neocórtex) */
+    #imgLimbico1 {
+      z-index: 3;
+    }
+
+    /* NEOCÓRTEX - nivel 4 (el más alto para que el texto siempre sea legible) */
+    #imgNeocortex {
+      z-index: 4;
+    }
+
+    /* Clases de control visual (no modifican z-index, solo apariencia) */
     .capa-activa {
       opacity: 1 !important;
       filter: blur(0) !important;
       pointer-events: auto !important;
-      z-index: 4;
     }
     .capa-desenfocada {
       opacity: 0.4 !important;
       filter: blur(3px) !important;
       pointer-events: auto !important;
-      z-index: 3;
     }
     .capa-oculta {
       opacity: 0 !important;
       pointer-events: none !important;
-      z-index: 2;
     }
-    /* Fondo base */
-    #imgFondo {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: filter 0.3s ease, opacity 0.3s ease;
-      z-index: 1;
-      pointer-events: none;
-    }
+
     .fondo-nitido { filter: blur(0); opacity: 1; }
     .fondo-desenfocado { filter: blur(3px); opacity: 0.8; }
-
-    /* Clases para modo vista completa (todo nítido y visible) */
-    .modo-completo #imgFondo {
-      filter: blur(0) !important;
-      opacity: 1 !important;
-    }
-    .modo-completo .capa-imagen {
-      opacity: 1 !important;
-      filter: blur(0) !important;
-      pointer-events: none !important; /* no queremos clics accidentales en modo completo */
-      z-index: 2 !important;
-    }
 
     .leyenda-capas {
       display: flex;
@@ -344,6 +311,34 @@
       font-weight: bold;
     }
 
+    /* Botones de control inferior */
+    .botones-inferiores {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin: 30px 0 20px;
+      flex-wrap: wrap;
+    }
+    .btn-secundario {
+      background: #4f3e2e;
+      color: #d4af37;
+      border: 2px solid #d4af37;
+      padding: 12px 25px;
+      border-radius: 50px;
+      font-weight: bold;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 0 #2b1f15;
+    }
+    .btn-secundario:hover {
+      background: #6b4f3a;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 #2b1f15;
+    }
+
     /* Botón de email al docente */
     .btn-email {
       display: inline-block;
@@ -389,9 +384,9 @@
 </head>
 <body>
 
-<h1>✂️ Semana 7 · ANUNCIO BARBERSHOP · TRES CEREBROS ✂️</h1>
+<h1>✂️ BARBERSHOP · TRES CEREBROS ✂️</h1>
 <div class="subtitulo">
-  🧠 Diagrama visual del cerebro con las tres capas diferenciadas por color: rojo=reptiliano, amarillo=límbico, azul=neocórtex.
+  🧠 El ambiente base (Limbico_2) siempre está presente. Usa los botones o haz clic en las imágenes para explorar.
 </div>
 
 <div class="contenedor-principal">
@@ -403,35 +398,14 @@
       <button id="btnNeocortex" class="boton-capa inactivo">🧠 NEOCÓRTEX</button>
     </div>
 
-    <!-- Botón de vista completa (nítido) -->
-    <div class="vista-completa-container">
-      <button id="btnVistaCompleta">🔆 VISTA COMPLETA NÍTIDA</button>
-    </div>
-
     <div class="flyer-wrapper">
-      <div class="flyer-capas" id="contenedorCapas">
-        <!-- FONDO BASE: Limbico_2 -->
+      <div class="flyer-capas">
+        <!-- FONDO BASE: Limbico_2 (siempre visible) -->
         <img id="imgFondo"
              class="fondo-base fondo-desenfocado"
              src="Limbico_2.png"
              alt="Ambiente de barbería con luz cálida"
              title="Fondo: ambiente cálido (siempre presente)">
-
-        <!-- NEOCÓRTEX (datos racionales) -->
-        <img id="imgNeocortex"
-             class="capa-imagen capa-oculta"
-             src="Neurocortex.png"
-             alt="Elementos neocórtex: dirección, URL, año 1968"
-             title="Neocórtex: información práctica"
-             data-capa="neocortex">
-
-        <!-- LÍMBICO 1 (silla de cuero) -->
-        <img id="imgLimbico1"
-             class="capa-imagen capa-oculta"
-             src="Limbico_1.png"
-             alt="Silla de cuero acolchada"
-             title="Límbico: confort y emoción"
-             data-capa="limbico">
 
         <!-- REPTILIANO (logo barba/calaveras) -->
         <img id="imgReptiliano"
@@ -440,6 +414,22 @@
              alt="Logo de barba y calaveras"
              title="Reptiliano: territorio y dominancia"
              data-capa="reptiliano">
+
+        <!-- LÍMBICO 1 (silla de cuero) - ahora con z-index inferior a neocórtex -->
+        <img id="imgLimbico1"
+             class="capa-imagen capa-oculta"
+             src="Limbico_1.png"
+             alt="Silla de cuero acolchada"
+             title="Límbico: confort y emoción"
+             data-capa="limbico">
+
+        <!-- NEOCÓRTEX (datos racionales) - z-index más alto para legibilidad -->
+        <img id="imgNeocortex"
+             class="capa-imagen capa-oculta"
+             src="Neurocortex.png"
+             alt="Elementos neocórtex: dirección, URL, año 1968"
+             title="Neocórtex: información práctica"
+             data-capa="neocortex">
       </div>
     </div>
 
@@ -475,6 +465,12 @@
       <p>Colores tierra, símbolos de fuerza, madera oscura.</p>
     </div>
   </div>
+</div>
+
+<!-- BOTONES DE CONTROL INFERIOR -->
+<div class="botones-inferiores">
+  <button class="btn-secundario" id="btnVistaCompleta">🔆 VISTA COMPLETA NÍTIDA</button>
+  <button class="btn-secundario" id="btnResetDesenfoque">🔄 RESTABLECER DESENFOQUE</button>
 </div>
 
 <!-- CUESTIONARIO -->
@@ -534,7 +530,7 @@
 
 <script>
   (function() {
-    // Datos de cada cerebro (incluye mensajes subconscientes detallados)
+    // Datos de cada cerebro
     const datosBarber = {
       reptiliano: {
         titulo: "🐊 REPTILIANO · SUPERVIVENCIA & TERRITORIO",
@@ -563,16 +559,16 @@
     };
 
     // Elementos del DOM
-    const contenedorCapas = document.getElementById('contenedorCapas');
     const imgFondo = document.getElementById('imgFondo');
     const imgRept  = document.getElementById('imgReptiliano');
     const imgLimb1 = document.getElementById('imgLimbico1');
     const imgNeo   = document.getElementById('imgNeocortex');
-    const btnVistaCompleta = document.getElementById('btnVistaCompleta');
 
     const btnR = document.getElementById('btnReptiliano');
     const btnL = document.getElementById('btnLimbico');
     const btnN = document.getElementById('btnNeocortex');
+    const btnVistaCompleta = document.getElementById('btnVistaCompleta');
+    const btnReset = document.getElementById('btnResetDesenfoque');
 
     const tituloEl = document.getElementById('tituloCerebro');
     const elemTexto = document.getElementById('elemTexto');
@@ -588,17 +584,13 @@
       document.getElementById('aplicacion')
     ];
 
-    // Estado: modo interactivo (false) o vista completa nítida (true)
-    let modoCompleto = false;
-
-    // Función que aplica las clases de visualización según el cerebro activo (modo interactivo)
-    function actualizarCapasInteractivo(tipo) {
-      // Quitar clases específicas de todas las capas (excepto fondo)
+    // Función para resetear clases visuales (sin cambiar el cerebro activo)
+    function aplicarEstadoVisual(tipo) {
+      // Quitar clases específicas
       [imgRept, imgLimb1, imgNeo].forEach(img => {
         img.classList.remove('capa-activa', 'capa-desenfocada', 'capa-oculta');
       });
 
-      // Aplicar según tipo
       if (tipo === 'reptiliano') {
         imgRept.classList.add('capa-activa');
         imgLimb1.classList.add('capa-oculta');
@@ -613,7 +605,7 @@
         imgFondo.classList.remove('fondo-desenfocado');
         imgFondo.classList.add('fondo-nitido');
       } 
-      else { // neocortex
+      else if (tipo === 'neocortex') {
         imgNeo.classList.add('capa-activa');
         imgRept.classList.add('capa-desenfocada');
         imgLimb1.classList.add('capa-oculta');
@@ -622,10 +614,9 @@
       }
     }
 
-    // Actualiza el panel de información y los estilos de botones/bloques
+    // Actualiza panel de información y botones
     function activarCerebro(tipo) {
       const d = datosBarber[tipo];
-
       tituloEl.textContent = d.titulo;
       elemTexto.textContent = d.elemento;
       mensajeTexto.innerHTML = `<i>${d.mensaje}</i>`;
@@ -633,7 +624,6 @@
       preguntaP.textContent = d.pregunta;
       aplicacionP.textContent = d.aplicacion;
 
-      // Cambiar color de los bloques laterales
       bloques.forEach(b => {
         b.classList.remove('bloque-rept', 'bloque-limb', 'bloque-neo');
         if (tipo === 'reptiliano') b.classList.add('bloque-rept');
@@ -641,7 +631,6 @@
         if (tipo === 'neocortex')  b.classList.add('bloque-neo');
       });
 
-      // Actualizar botones
       [btnR, btnL, btnN].forEach(b => {
         b.classList.remove('activo');
         b.classList.add('inactivo');
@@ -650,68 +639,59 @@
       if (tipo === 'limbico')    { btnL.classList.add('activo'); btnL.classList.remove('inactivo'); }
       if (tipo === 'neocortex')  { btnN.classList.add('activo'); btnN.classList.remove('inactivo'); }
 
-      // Si estamos en modo interactivo, actualizar capas; si estamos en modo completo, no cambiar la vista
-      if (!modoCompleto) {
-        actualizarCapasInteractivo(tipo);
-      }
+      aplicarEstadoVisual(tipo);
     }
 
-    // Cambiar entre modo interactivo y modo completo
-    function toggleVistaCompleta() {
-      modoCompleto = !modoCompleto;
-      if (modoCompleto) {
-        // Activar modo completo: todas las capas visibles y nítidas
-        contenedorCapas.classList.add('modo-completo');
-        btnVistaCompleta.classList.add('activo');
-        btnVistaCompleta.textContent = '🔆 MODO INTERACTIVO (DESENFOQUES)';
-        // Las capas ya son visibles por la clase .modo-completo, no necesitamos cambiar clases individuales
-      } else {
-        // Volver a modo interactivo: restaurar según cerebro activo actual
-        contenedorCapas.classList.remove('modo-completo');
-        btnVistaCompleta.classList.remove('activo');
-        btnVistaCompleta.textContent = '🔆 VISTA COMPLETA NÍTIDA';
-        // Restaurar la vista interactiva basada en el cerebro actual (el que esté activo en los botones)
-        let tipoActual = 'reptiliano';
-        if (btnL.classList.contains('activo')) tipoActual = 'limbico';
-        else if (btnN.classList.contains('activo')) tipoActual = 'neocortex';
-        actualizarCapasInteractivo(tipoActual);
-      }
+    // Vista completa: todas las capas nítidas, fondo nítido
+    function vistaCompleta() {
+      [imgRept, imgLimb1, imgNeo].forEach(img => {
+        img.classList.remove('capa-oculta', 'capa-desenfocada');
+        img.classList.add('capa-activa');
+      });
+      imgFondo.classList.remove('fondo-desenfocado');
+      imgFondo.classList.add('fondo-nitido');
+
+      // Desmarcar botones de cerebro
+      [btnR, btnL, btnN].forEach(b => {
+        b.classList.remove('activo');
+        b.classList.add('inactivo');
+      });
     }
 
-    // Eventos de botones de cerebro (solo afectan si no estamos en modo completo)
-    btnR.addEventListener('click', () => {
-      if (!modoCompleto) activarCerebro('reptiliano');
-      else {
-        // Si está en modo completo, cambiamos la info pero no la vista
-        activarCerebro('reptiliano');
-      }
-    });
-    btnL.addEventListener('click', () => {
-      if (!modoCompleto) activarCerebro('limbico');
-      else activarCerebro('limbico');
-    });
-    btnN.addEventListener('click', () => {
-      if (!modoCompleto) activarCerebro('neocortex');
-      else activarCerebro('neocortex');
-    });
+    // Restablecer al último cerebro activo (guardamos el estado)
+    let cerebroActual = 'reptiliano';
+    function restablecerDesenfoque() {
+      activarCerebro(cerebroActual);
+    }
 
-    // Eventos de clic en las imágenes (solo tienen efecto si NO estamos en modo completo)
+    // Sobrescribir activarCerebro para que guarde el estado
+    const originalActivar = activarCerebro;
+    activarCerebro = function(tipo) {
+      cerebroActual = tipo;
+      originalActivar(tipo);
+    };
+
+    // Eventos de botones principales
+    btnR.addEventListener('click', () => activarCerebro('reptiliano'));
+    btnL.addEventListener('click', () => activarCerebro('limbico'));
+    btnN.addEventListener('click', () => activarCerebro('neocortex'));
+
+    // Eventos de clic en imágenes
     [imgRept, imgLimb1, imgNeo].forEach(img => {
       img.addEventListener('click', e => {
-        if (!modoCompleto) {
-          const capa = e.currentTarget.getAttribute('data-capa');
-          activarCerebro(capa);
-        }
+        const capa = e.currentTarget.getAttribute('data-capa');
+        activarCerebro(capa);
       });
     });
 
-    // Evento del botón de vista completa
-    btnVistaCompleta.addEventListener('click', toggleVistaCompleta);
+    // Botones inferiores
+    btnVistaCompleta.addEventListener('click', vistaCompleta);
+    btnReset.addEventListener('click', () => restablecerDesenfoque());
 
-    // Inicializar con reptiliano
+    // Inicializar
     activarCerebro('reptiliano');
 
-    // ---------- CUESTIONARIO ----------
+    // Cuestionario
     const btnComprobar = document.getElementById('comprobarQuiz');
     const resultadoDiv = document.getElementById('resultadoQuiz');
     const preguntas = [
