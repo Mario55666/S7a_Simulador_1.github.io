@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
   <title>Barbershop · Teoría de los 3 cerebros</title>
   <style>
     * {
@@ -14,35 +14,38 @@
       font-family: 'Segoe UI', Roboto, Arial, sans-serif;
       background: #1a1a1a;
       color: #e0e0e0;
-      padding: 25px 15px;
+      padding: 15px 10px;
       display: flex;
       flex-direction: column;
       align-items: center;
+      min-height: 100vh;
     }
     h1 {
       text-align: center;
       font-weight: 400;
-      letter-spacing: 2px;
+      letter-spacing: 1px;
       text-transform: uppercase;
       color: #d4af37;
       border-bottom: 1px solid #3e2e1f;
-      padding-bottom: 12px;
-      margin-bottom: 20px;
+      padding-bottom: 10px;
+      margin-bottom: 15px;
       width: 100%;
       max-width: 1200px;
+      font-size: clamp(1.2rem, 5vw, 2rem);
     }
     .subtitulo {
       text-align: center;
       max-width: 800px;
-      margin: 0 auto 30px;
-      font-size: 1.1rem;
+      margin: 0 auto 20px;
+      font-size: 0.95rem;
       color: #b0a090;
       font-style: italic;
+      padding: 0 5px;
     }
     .contenedor-principal {
       display: flex;
       flex-wrap: wrap;
-      gap: 25px;
+      gap: 20px;
       justify-content: center;
       align-items: stretch;
       max-width: 1300px;
@@ -51,33 +54,37 @@
 
     /* Tarjeta del flyer */
     .cerebro-card {
-      flex: 1 1 480px;
+      flex: 1 1 400px;
       background: #2d241c;
-      border-radius: 24px;
-      padding: 20px;
+      border-radius: 20px;
+      padding: 15px;
       box-shadow: 0 20px 30px -10px rgba(0,0,0,0.8), inset 0 0 0 1px #6b4f3a;
       backdrop-filter: blur(2px);
     }
+    /* Botones envueltos en wrap, sin scroll */
     .botones-capas {
       display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 15px;
     }
     .boton-capa {
-      flex: 1;
-      padding: 12px 5px;
+      flex: 1 1 auto;
+      min-width: 110px;
+      padding: 10px 5px;
       border: none;
-      border-radius: 50px;
+      border-radius: 40px;
       font-weight: bold;
-      font-size: 1rem;
+      font-size: 0.9rem;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 0.5px;
       cursor: pointer;
       transition: all 0.2s ease;
       box-shadow: 0 4px 0 rgba(0,0,0,0.3);
       color: white;
       border: 1px solid rgba(255,255,255,0.2);
+      white-space: nowrap;
     }
     .boton-capa.activo {
       transform: translateY(-2px);
@@ -94,25 +101,26 @@
     .flyer-wrapper {
       background: #1e1611;
       border-radius: 16px;
-      padding: 15px;
+      padding: 10px;
       border: 2px solid #7a5e44;
       box-shadow: inset 0 0 20px #0a0a0a;
       display: flex;
       justify-content: center;
       align-items: center;
     }
+    /* Contenedor con aspecto cuadrado responsivo, sin overflow */
     .flyer-capas {
       position: relative;
-      width: 750px;
-      height: 750px;
-      max-width: 100%;
+      width: 100%;
+      padding-bottom: 100%; /* 1:1 aspect ratio */
+      height: 0;
       border-radius: 8px;
-      overflow: hidden;
+      overflow: hidden; /* ocultamos cualquier desborde, pero no hay scroll */
       background-color: #2b1f15;
       background-image: repeating-linear-gradient(45deg, #3e2e1f 0px, #3e2e1f 10px, #4f3e2e 10px, #4f3e2e 20px);
     }
 
-    /* Todas las imágenes se posicionan absolutas */
+    /* Todas las imágenes absolutas dentro del contenedor */
     .flyer-capas img {
       position: absolute;
       top: 0;
@@ -134,17 +142,17 @@
       z-index: 2;
     }
 
-    /* LÍMBICO 1 - nivel 3 (por debajo de neocórtex) */
+    /* LÍMBICO 1 - nivel 3 */
     #imgLimbico1 {
       z-index: 3;
     }
 
-    /* NEOCÓRTEX - nivel 4 (el más alto para que el texto siempre sea legible) */
+    /* NEOCÓRTEX - nivel 4 (el más alto para que el texto sea legible) */
     #imgNeocortex {
       z-index: 4;
     }
 
-    /* Clases de control visual (no modifican z-index, solo apariencia) */
+    /* Clases de control visual */
     .capa-activa {
       opacity: 1 !important;
       filter: blur(0) !important;
@@ -166,18 +174,19 @@
     .leyenda-capas {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 16px;
+      gap: 8px;
+      margin-top: 12px;
       justify-content: center;
     }
     .tag {
-      padding: 6px 14px;
-      border-radius: 40px;
-      font-size: 0.8rem;
+      padding: 4px 10px;
+      border-radius: 30px;
+      font-size: 0.7rem;
       font-weight: 600;
       background: #2f2a24;
       border-left: 4px solid;
       color: #ddd;
+      white-space: nowrap;
     }
     .tag-rept { border-color: #b34b3f; }
     .tag-limb { border-color: #c49a2b; }
@@ -185,30 +194,34 @@
 
     /* Panel de información */
     .info-card {
-      flex: 1 1 400px;
+      flex: 1 1 350px;
       background: #2d241c;
-      border-radius: 24px;
-      padding: 25px;
+      border-radius: 20px;
+      padding: 20px;
       box-shadow: 0 20px 30px -10px black, inset 0 0 0 1px #6b4f3a;
       display: flex;
       flex-direction: column;
     }
     .titulo-cerebro {
-      font-size: 2rem;
+      font-size: clamp(1.2rem, 4vw, 2rem);
       font-weight: 300;
       margin-bottom: 10px;
       color: #d4af37;
       border-bottom: 1px dashed #7a5e44;
-      padding-bottom: 10px;
+      padding-bottom: 8px;
     }
     .bloque-info {
-      margin: 12px 0;
+      margin: 8px 0;
       background: #1f1a15;
-      padding: 14px 18px;
-      border-radius: 16px;
+      padding: 12px 15px;
+      border-radius: 14px;
       border-left: 6px solid;
     }
-    .bloque-info p { margin: 6px 0; line-height: 1.5; }
+    .bloque-info p { 
+      margin: 4px 0; 
+      line-height: 1.4;
+      font-size: 0.9rem;
+    }
     .bloque-rept { border-color: #b34b3f; }
     .bloque-limb { border-color: #c49a2b; }
     .bloque-neo  { border-color: #3c6b7c; }
@@ -216,46 +229,46 @@
       font-weight: 600;
       color: #d4af37;
       text-transform: uppercase;
-      font-size: 0.8rem;
-      letter-spacing: 2px;
+      font-size: 0.7rem;
+      letter-spacing: 1px;
     }
-    hr { border: none; height: 1px; background: #3e2e1f; margin: 15px 0; }
+    hr { border: none; height: 1px; background: #3e2e1f; margin: 12px 0; }
 
-    /* Estilos para el formulario de datos del estudiante */
+    /* Formulario de datos del estudiante */
     .form-estudiante {
       background: #2b231d;
-      border-radius: 20px;
-      padding: 20px;
-      margin-bottom: 25px;
+      border-radius: 18px;
+      padding: 18px;
+      margin-bottom: 20px;
       border: 1px solid #7a5e44;
     }
     .form-estudiante h3 {
       color: #d4af37;
-      margin-bottom: 15px;
+      margin-bottom: 12px;
       font-weight: 400;
       text-transform: uppercase;
       letter-spacing: 1px;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
     }
     .campo-form {
-      margin-bottom: 15px;
+      margin-bottom: 12px;
     }
     .campo-form label {
       display: block;
       color: #b0a090;
-      margin-bottom: 5px;
-      font-size: 0.9rem;
+      margin-bottom: 4px;
+      font-size: 0.8rem;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
     .campo-form input {
       width: 100%;
-      padding: 12px 15px;
+      padding: 10px 14px;
       background: #1f1a15;
       border: 2px solid #4f3e2e;
-      border-radius: 50px;
+      border-radius: 40px;
       color: #e0e0e0;
-      font-size: 1rem;
+      font-size: 0.95rem;
       transition: all 0.2s;
     }
     .campo-form input:focus {
@@ -266,45 +279,47 @@
     .campo-form input::placeholder {
       color: #6b5a4a;
       font-style: italic;
+      font-size: 0.9rem;
     }
 
     /* Cuestionario */
     .quiz-section {
       max-width: 900px;
       width: 100%;
-      margin-top: 40px;
+      margin-top: 30px;
       background: #2d241c;
-      border-radius: 30px;
-      padding: 30px;
+      border-radius: 24px;
+      padding: 20px;
       box-shadow: 0 20px 30px -10px black, inset 0 0 0 1px #6b4f3a;
     }
     .quiz-section h2 {
       color: #d4af37;
       font-weight: 300;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
       text-align: center;
-      font-size: 2rem;
+      font-size: clamp(1.3rem, 5vw, 2rem);
     }
     .pregunta {
       background: #1f1a15;
-      border-radius: 20px;
-      padding: 20px;
-      margin-bottom: 20px;
+      border-radius: 18px;
+      padding: 18px;
+      margin-bottom: 18px;
       border-left: 8px solid;
     }
     .pregunta h3 {
-      margin-bottom: 15px;
+      margin-bottom: 12px;
       color: #e0d3c0;
-      font-size: 1.3rem;
+      font-size: 1.1rem;
+      line-height: 1.4;
     }
-    .opciones { display: flex; flex-direction: column; gap: 12px; }
+    .opciones { display: flex; flex-direction: column; gap: 10px; }
     .opcion {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       background: #2b231d;
-      padding: 10px 18px;
-      border-radius: 50px;
+      padding: 8px 14px;
+      border-radius: 40px;
       border: 1px solid #4f3e2e;
       cursor: pointer;
       transition: all 0.2s;
@@ -312,34 +327,41 @@
     .opcion:hover { background: #3f3228; border-color: #d4af37; }
     .opcion input[type="radio"] {
       appearance: none;
-      width: 20px;
-      height: 20px;
+      width: 18px;
+      height: 18px;
       border: 2px solid #7a5e44;
       border-radius: 50%;
       background: #1a1a1a;
       transition: 0.1s;
       cursor: pointer;
+      flex-shrink: 0;
     }
     .opcion input[type="radio"]:checked {
       background: #d4af37;
       border-color: #d4af37;
       box-shadow: 0 0 8px gold;
     }
-    .opcion label { flex: 1; font-size: 1rem; color: #ddd; cursor: pointer; }
+    .opcion label { 
+      flex: 1; 
+      font-size: 0.95rem; 
+      color: #ddd; 
+      cursor: pointer;
+      line-height: 1.3;
+    }
     .btn-comprobar {
       background: #c49a2b;
       border: none;
       color: #1a1a1a;
       font-weight: bold;
-      font-size: 1.2rem;
-      padding: 15px 30px;
-      border-radius: 60px;
+      font-size: 1.1rem;
+      padding: 14px 20px;
+      border-radius: 50px;
       cursor: pointer;
       transition: 0.2s;
       margin-top: 15px;
       width: 100%;
       text-transform: uppercase;
-      letter-spacing: 2px;
+      letter-spacing: 1px;
       box-shadow: 0 6px 0 #7a5e44;
     }
     .btn-comprobar:hover {
@@ -348,12 +370,12 @@
       box-shadow: 0 8px 0 #7a5e44;
     }
     .resultado-quiz {
-      margin-top: 20px;
-      font-size: 1.3rem;
+      margin-top: 18px;
+      font-size: 1.2rem;
       text-align: center;
       background: #1f1a15;
-      padding: 15px;
-      border-radius: 60px;
+      padding: 12px;
+      border-radius: 50px;
       color: #d4af37;
       font-weight: bold;
     }
@@ -362,23 +384,25 @@
     .botones-inferiores {
       display: flex;
       justify-content: center;
-      gap: 20px;
-      margin: 30px 0 20px;
+      gap: 15px;
+      margin: 25px 0 15px;
       flex-wrap: wrap;
     }
     .btn-secundario {
       background: #4f3e2e;
       color: #d4af37;
       border: 2px solid #d4af37;
-      padding: 12px 25px;
-      border-radius: 50px;
+      padding: 10px 18px;
+      border-radius: 40px;
       font-weight: bold;
-      font-size: 1rem;
+      font-size: 0.9rem;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 0.5px;
       cursor: pointer;
       transition: all 0.2s ease;
       box-shadow: 0 4px 0 #2b1f15;
+      flex: 0 1 auto;
+      min-width: 140px;
     }
     .btn-secundario:hover {
       background: #6b4f3a;
@@ -393,10 +417,10 @@
       color: white;
       text-decoration: none;
       font-weight: bold;
-      font-size: 1.1rem;
-      padding: 12px 30px;
-      border-radius: 50px;
-      margin: 20px auto 10px;
+      font-size: 1rem;
+      padding: 10px 20px;
+      border-radius: 40px;
+      margin: 15px auto 5px;
       border: 1px solid #d4af37;
       box-shadow: 0 4px 0 #6d2e26;
       transition: all 0.2s ease;
@@ -411,21 +435,42 @@
 
     /* Footer */
     footer {
-      margin-top: 30px;
+      margin-top: 25px;
       color: #b0a090;
-      font-size: 0.9rem;
+      font-size: 0.8rem;
       text-align: center;
       border-top: 1px solid #3e2e1f;
-      padding-top: 20px;
+      padding-top: 15px;
       width: 100%;
       max-width: 1200px;
     }
     footer p {
-      margin: 5px 0;
+      margin: 4px 0;
     }
     .footer-docente {
       color: #d4af37;
       font-weight: 500;
+    }
+
+    /* Ajustes para pantallas muy pequeñas */
+    @media (max-width: 480px) {
+      .boton-capa {
+        min-width: 90px;
+        font-size: 0.8rem;
+        padding: 8px 3px;
+      }
+      .tag {
+        font-size: 0.6rem;
+        padding: 3px 6px;
+      }
+      .bloque-info p {
+        font-size: 0.85rem;
+      }
+      .btn-secundario {
+        min-width: 120px;
+        font-size: 0.8rem;
+        padding: 8px 12px;
+      }
     }
   </style>
 </head>
@@ -433,7 +478,7 @@
 
 <h1>✂️ SEMANA 7 · BARBERSHOP · TRES CEREBROS ✂️</h1>
 <div class="subtitulo">
-  🧠 Diagrama visual del cerebro con las tres capas diferenciadas por color: rojo=reptiliano, amarillo=límbico, azul=neocórtex.
+  🧠 Diagrama visual del cerebro con las tres capas: rojo=reptiliano, amarillo=límbico, azul=neocórtex. Diseño adaptable a Android.
 </div>
 
 <div class="contenedor-principal">
@@ -462,7 +507,7 @@
              title="Reptiliano: territorio y dominancia"
              data-capa="reptiliano">
 
-        <!-- LÍMBICO 1 (silla de cuero) - ahora con z-index inferior a neocórtex -->
+        <!-- LÍMBICO 1 (silla de cuero) -->
         <img id="imgLimbico1"
              class="capa-imagen capa-oculta"
              src="Limbico_1.png"
@@ -470,7 +515,7 @@
              title="Límbico: confort y emoción"
              data-capa="limbico">
 
-        <!-- NEOCÓRTEX (datos racionales) - z-index más alto para legibilidad -->
+        <!-- NEOCÓRTEX (datos racionales) -->
         <img id="imgNeocortex"
              class="capa-imagen capa-oculta"
              src="Neurocortex.png"
@@ -577,7 +622,7 @@
   <div class="resultado-quiz" id="resultadoQuiz">—</div>
 
   <!-- Botón para enviar mensaje al docente (incluye datos del estudiante y resultado) -->
-  <div style="text-align: center; margin-top: 30px;">
+  <div style="text-align: center; margin-top: 20px;">
     <a href="#" class="btn-email" id="btnEnviarDocente">✉️ Enviar resultados al docente</a>
   </div>
 </section>
@@ -644,7 +689,7 @@
       document.getElementById('aplicacion')
     ];
 
-    // Función para resetear clases visuales (sin cambiar el cerebro activo)
+    // Función para aplicar estado visual según el cerebro activo
     function aplicarEstadoVisual(tipo) {
       // Quitar clases específicas
       [imgRept, imgLimb1, imgNeo].forEach(img => {
