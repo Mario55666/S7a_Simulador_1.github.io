@@ -2,7 +2,7 @@
 
 ## Descripción del proyecto
 
-Este proyecto es una herramienta educativa interactiva desarrollada para la asignatura **Semiótica de la Imagen** (Universidad Tecnológica del Perú). Su objetivo es demostrar cómo la teoría de los tres cerebros de Paul MacLean –reptiliano, límbico y neocórtex– se aplica en el diseño de una pieza gráfica real: un flyer de barbería. El usuario puede explorar los elementos visuales del flyer, comprender qué mensajes subconscientes activa cada capa cerebral y poner a prueba sus conocimientos mediante un cuestionario.
+Este proyecto es una herramienta educativa interactiva desarrollada para la asignatura **Semiótica de la Imagen**. Su objetivo es demostrar cómo la teoría de los tres cerebros de Paul MacLean –reptiliano, límbico y neocórtex– se aplica en el diseño de una pieza gráfica real: un flyer de barbería. El usuario puede explorar los elementos visuales del flyer, comprender qué mensajes subconscientes activa cada capa cerebral y poner a prueba sus conocimientos mediante un cuestionario.
 
 La interfaz combina una presentación atractiva con madera oscura y detalles dorados, evocando el ambiente de una barbería clásica, mientras que la lógica de capas (imágenes superpuestas con transparencia) permite visualizar cómo cada cerebro procesa distintos estímulos.
 
@@ -54,8 +54,7 @@ La interfaz combina una presentación atractiva con madera oscura y detalles dor
 ## Créditos
 
 - **Docente**: Mg. Mario Quiroz  
-- **Curso**: Semiótica de la Imagen · 2026 · Semana 7  
-- **Universidad Tecnológica del Perú**  
+- **Curso**: Semiótica de la Imagen · 2026 · Semana 7   
 - Basado en la teoría de los tres cerebros de **Paul MacLean**.
 
 ## Licencia
